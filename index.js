@@ -31,13 +31,22 @@ module.exports = function (file, condition) {
 	}
 
 	if (Array.isArray(condition)) {
+		// Copy the array as we may modify it later.
+		var conditions = condition.slice(0);
+
 		// FRAGILE: ASSUME: it's a minimatch expression
-		if (!condition.length) {
+		if (!conditions.length) {
 			throw new Error('gulp-match: empty glob array');
 		}
 		var i = 0, step, ret = false;
-		for (i = 0; i < condition.length; i++) {
-			step = condition[i];
+		var hasNonNegate = conditions.some(function(expression) {
+			return expression && expression[0] !== '!';
+		});
+		if (!hasNonNegate) {
+			conditions.push('**/*');
+		}
+		for (i = 0; i < conditions.length; i++) {
+			step = conditions[i];
 			if (step[0] === '!') {
 				if (minimatch(file.path, step.slice(1))) {
 					return false;

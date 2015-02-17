@@ -69,6 +69,22 @@ describe('gulp-match', function() {
 			multiPatternTest('.jshintrc', false);
 			multiPatternTest('app.js', true);
 		});
+		var singlePatternTest = function(file, expected) {
+			// arrange
+			var pattern = ['!*.css'];
+
+			// act
+			var actual = gulpmatch({path:file}, pattern);
+
+			// assert
+			actual.should.equal(expected);
+
+
+		};
+		it('should filter files with a single negate pattern', function() {
+			singlePatternTest('excluded.css', false);
+			singlePatternTest('included.js', true);
+		});
 
 	});
 });
