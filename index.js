@@ -38,7 +38,7 @@ module.exports = function (file, condition) {
 		if (!conditions.length) {
 			throw new Error('gulp-match: empty glob array');
 		}
-		var i = 0, step, ret = false;
+		var i, step, ret = false;
 		var hasNonNegate = conditions.some(function(expression) {
 			return expression && expression[0] !== '!';
 		});
